@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weather App</title>
+    <link rel="stylesheet" href="./style.css">
+</head>
+<body>
+
+
+
+
+    <div class="day-night">
+        
+        <label class="switch">
+            <input type="checkbox" id="toggle" />
+            <span class="slider"></span>
+        </label>
+    
+</div>
+<div class="container">
+
+    <div class="content">
+
+        <div class="row">
+            <div class="form">
+               <form action="">
+                    <input type="search" class="input" placeholder="Enter city Name">
+                    <button class="btn">
+                          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">!Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.<path  d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352a144 144 0 1 0 0-288 144 144 0 1 0 0 288z"/></svg>
+                    </button>
+                </form>
+            </div>
+        </div>
+       
+        <div class="row1">
+            
+            
+            <div class="image">
+                <img src="./images/map.svg" alt="" class="id-weather-icon">
+                <!-- <h4>Erode</h4> -->
+            </div>
+            <div class="text-content">
+                    <h1 class="id-city">City</h1>
+                    <h2 class="id-degree">0&deg;C </h2>
+                    <h2 class="id-weather">weather</h2>
+            </div>
+        
+            
+        </div>
+        <div class="row2">
+            <div class="humidity">
+
+                <div class="humidity-image">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512">!Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.<path d="M192 512C86 512 0 426 0 320C0 228.8 130.2 57.7 166.6 11.7C172.6 4.2 181.5 0 191.1 0l1.8 0c9.6 0 18.5 4.2 24.5 11.7C253.8 57.7 384 228.8 384 320c0 106-86 192-192 192zM96 336c0-8.8-7.2-16-16-16s-16 7.2-16 16c0 61.9 50.1 112 112 112c8.8 0 16-7.2 16-16s-7.2-16-16-16c-44.2 0-80-35.8-80-80z"/></svg>
+                  
+                </div>
+                <div class="humidity-text">
+                     <h3 class="id-humidity">0%</h3>
+                    <p>Humidity</p>
+                </div>
+            </div>
+            <div class="wind-speed">
+                <div class="wind-speed-image">
+                        <img src="./images/mist.png" alt="">
+                </div>
+                <div class="wind-speed-text">
+                     <h3 class="id-wind-speed">0m/s</h3>
+                    <p>Wind Speed</p>
+                </div>
+                   
+            </div>
+        </div>
+              
+    </div>
+</div>
+
+<script src="./js/day-night.js"></script>
+
+<script>
+    const apikey="8b7359deac4e0b439bdd128894ec9cda";
+    const url="https://api.openweathermap.org/data/2.5/weather?&units=metric&q="; 
+
+    const searchbox=document.querySelector(".input");
+    const searchbtn=document.querySelector("form");
+    const weathericon=document.querySelector(".id-weather-icon")
+    async function checkweather(city){
+        const res=await fetch(url + city+ `&appid=${apikey}`);
+        var data=await res.json();
+        console.log(data);
+        console.log(data.cod);
+
+
+        if(data.cod==404)
+        {
+            weathericon.src='./images/404.png';
+            document.querySelector(".id-city").innerHTML="404";
+
+        }
+        else{
+
+        document.querySelector(".id-city").innerHTML=data.name;
+        document.querySelector(".id-degree").innerHTML=Math.round(data.main.temp)+"&deg;C ";
+        document.querySelector(".id-weather").innerHTML=data.weather[0].main;
+        document.querySelector(".id-humidity").innerHTML=data.main.humidity+"%";
+        document.querySelector(".id-wind-speed").innerHTML=Math.round(data.wind.speed)+"m/s";
+        
+
+        if(data.weather[0].main=="Clouds")
+        {
+          weathericon.src='./images/cloud.png';
+        }
+        else if(data.weather[0].main=="Clear")
+        {
+            weathericon.src='./images/clear.png';
+        }
+        else if(data.weather[0].main=="Rain")
+        {
+            weathericon.src='./images/rain.png';
+        }
+        else if(data.weather[0].main=="Dizzle")
+        {
+            weathericon.src='./images/snow.png';
+        }
+        else if(data.weather[0].main=="Haze")
+        {
+            weathericon.src='./images/haze.svg';
+        }
+        else if(data.weather[0].main=="Mist")
+        {
+            weathericon.src='./images/mist.svg';
+        }
+    }
+    }
+
+    searchbtn.addEventListener("submit",(event)=>{
+        event.preventDefault(); 
+        checkweather(searchbox.value);
+    }
+    )
+
+   
+</script>
+
+
+
+
+    
+</body>
+</html>
